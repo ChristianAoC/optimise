@@ -9,7 +9,8 @@ export default function App() {
   const [outdoorTemp, setOutdoorTemp] = useState(10);
   const [outdoorTempMax, setOutdoorTempMax] = useState(22);
   const [outdoorTempMin, setOutdoorTempMin] = useState(-8);
-  const [lowerComf, setLowerComf] = useState(18);
+  // hardcoded right now b/c too complicated with CSS otherwise
+  const [lowerComf, setLowerComf] = useState(16);
   const [higherComf, setHigherComf] = useState(24);
 
   // https://www.h2xengineering.com/blogs/calculating-heat-loss-simple-understandable-guide/
@@ -18,15 +19,15 @@ export default function App() {
   const [thermostat, setThermostat] = useState(270);
   const thermToHeat = {
     270: 0,
-    315: 0.5,
-    345: 1,
-     15: 1.75,
-     45: 2.5,
-     75: 3.5
+    315: 15,
+    345: 18,
+     15: 21,
+     45: 24,
+     75: 27
   }
 
   const [gamePaused, setGamePaused] = useState(false);
-  const [gameStepSize, setGameStepSize] = useState(10); // 1000 is one second ticks
+  const [gameStepSize, setGameStepSize] = useState(100); // 1000 is one second ticks
   const [gameTurn, setGameTurn] = useState(24);
 
   useEffect(() => {
@@ -39,12 +40,13 @@ export default function App() {
         if (newOutTemp < outdoorTempMin) { setOutdoorTemp(outdoorTempMin) }
         else if (newOutTemp > outdoorTempMax) { setOutdoorTemp(outdoorTempMax) }
         else { setOutdoorTemp(newOutTemp) }
-        setOutdoorTemp(newOutTemp)
 
         // calculate new indoortemp
         var newInTemp = indoorTemp // old indoor temp
         newInTemp += (outdoorTemp-indoorTemp) * heatLoss // temp lost to outside
-        newInTemp += thermToHeat[thermostat] // temp gained from heating
+        if (thermToHeat[thermostat] > newInTemp) {
+          newInTemp = (newInTemp + thermToHeat[thermostat]) / 2 // temp gained from heating
+        }
         newInTemp = Math.round(newInTemp * 10) / 10 // round to one decimal
         setIndoorTemp(newInTemp)
       }
@@ -71,14 +73,17 @@ export default function App() {
     setGameStepSize(gameStepSize/2);
   }
 
+  function setTempGauge(temp) {
+    temp = (temp-21)*5
+  }
+
   return (
   <MantineProvider>
     <Grid align="center" mt="10">
     <Grid.Col span={3} align="right">
       Current temperature:
     </Grid.Col>
-    <Grid.Col span={6} m="0" p="0">
-      <Center align="center" m="0" p="0">
+    <Grid.Col span={6} m="0" p="0" align="center">
         <Box
           bg="linear-gradient(90deg, var(--mantine-color-blue-filled) 0%, var(--mantine-color-red-filled) 100%)"
           w="100%"
@@ -86,27 +91,30 @@ export default function App() {
           p="0"
           h="2em"
         >
-          <Group justify="space-between">
-            <Text align="left" ml="10px">too cold</Text>
-            <Box bd="2px dotted black" m="-2px" h="2.2em" p="0px 2em 0px 2em">
-              <Text align="center">comfy</Text>
-            </Box>
-            <Text align="right" mr="10px">too warm</Text>
-          </Group>
+        <Group justify="space-between">
+          <Text align="left" ml="10px">too cold</Text>
+          <Text align="right" mr="10px">too warm</Text>
+        </Group>
+        <Box h="2.4em" mt="-1.75em" ml={(lowerComf-1)*2.5+"%"} mr={(41-higherComf)*2.5+"%"} bd="3px dotted black">
+            <Text align="center">comfy</Text>
         </Box>
-      </Center>
+        <Box h="2.1em" mt="-2.25em" ml={(indoorTemp-21)*5+"%"}  w="3px" bg="yellow"></Box>
+        </Box>
       </Grid.Col>
       <Grid.Col span={3}>
-        <Text align="left">Inside: {indoorTemp}, outside: {outdoorTemp}</Text>
+        <Text align="left">Inside: {indoorTemp}ºC, outside: {outdoorTemp}ºC</Text>
       </Grid.Col>
 
       <Grid.Col span={12}>
       <Center>
-        <p>Hello World!</p>
+        <Text fw="bold">Keep it comfy!</Text>
       </Center>
       </Grid.Col>
 
-      <Grid.Col span={12}>
+      <Grid.Col span={3}>
+        <Text fw="bold" hidden="true">Too cold! Your workplace isn't comfortable anymore, increase the temperature.</Text>
+      </Grid.Col>
+      <Grid.Col span={6}>
       <Center>
         <AngleSlider
           aria-label="Angle slider"
@@ -129,15 +137,17 @@ export default function App() {
         />
         </Center>
         </Grid.Col>
+        <Grid.Col span={3}>
+        </Grid.Col>
 
         <Grid.Col span="auto">
           <Center>
           <Group id="app-footer">
-            <p>Day: {Math.floor(gameTurn/24)}, time: {gameTurn % 24}:00</p>
+            <Text w="12em">Day: {Math.floor(gameTurn/24)}, time: {gameTurn % 24}:00</Text>
             <Button variant="filled" color="green" size="md" radius="md" onClick={decreaseGameStepSize}>(slower)</Button>
-            <Button id="gamePauseButton" variant="filled" color="green" size="lg" radius="lg" onClick={(e) => pauseGame(e)}>Pause</Button>
+            <Button w="6em" id="gamePauseButton" variant="filled" color="green" size="lg" radius="lg" onClick={(e) => pauseGame(e)}>Pause</Button>
             <Button variant="filled" color="green" size="md" radius="md" onClick={increaseGameStepSize}>(faster)</Button>
-            <p>Speed: {(1/gameStepSize)*1000}x</p>
+            <Text w="12em">Speed: {(1/gameStepSize)*1000}x</Text>
           </Group>
           </Center>
         </Grid.Col>
