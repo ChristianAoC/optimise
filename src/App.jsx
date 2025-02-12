@@ -1,10 +1,12 @@
-//<script src="http://localhost:8097"></script>
 import { useState, useEffect } from 'react'
 import { AngleSlider, Box, Button, Center, Grid, Group, MantineProvider, Text } from '@mantine/core';
+import { useSearchParams } from "react-router";
 import './App.css'
 import '@mantine/core/styles.css';
 
 export default function App() {
+  const [params, setParams] = useSearchParams();
+
   const [indoorTemp, setIndoorTemp] = useState(21);
   const [outdoorTemp, setOutdoorTemp] = useState(10);
   const [outdoorTempMax, setOutdoorTempMax] = useState(22);
@@ -27,7 +29,7 @@ export default function App() {
   }
 
   const [gamePaused, setGamePaused] = useState(false);
-  const [gameStepSize, setGameStepSize] = useState(100); // 1000 is one second ticks
+  const delay = Number(params.get("delay")) || 1000;
   const [gameTurn, setGameTurn] = useState(24);
 
   useEffect(() => {
@@ -50,10 +52,10 @@ export default function App() {
         newInTemp = Math.round(newInTemp * 10) / 10 // round to one decimal
         setIndoorTemp(newInTemp)
       }
-    }, gameStepSize)
+    }, delay)
     return () => clearTimeout(timer)
    },
-   [gamePaused, gameTurn, gameStepSize, indoorTemp, outdoorTemp]
+   [gamePaused, gameTurn, delay, indoorTemp, outdoorTemp]
   )
   
   function pauseGame(e) {
@@ -66,22 +68,23 @@ export default function App() {
   }
 
   function decreaseGameStepSize() {
-    setGameStepSize(gameStepSize*2);
+    setParams({ delay: Number(delay*2)})
   }
 
   function increaseGameStepSize() {
-    setGameStepSize(gameStepSize/2);
+    setParams({ delay: Number(delay/2)})
   }
 
   function setTempGauge(temp) {
     temp = (temp-21)*5
   }
 
+
   return (
   <MantineProvider>
     <Grid align="center" mt="10">
     <Grid.Col span={3} align="right">
-      Current temperature:
+      <Text align="right">Current temperature:</Text>
     </Grid.Col>
     <Grid.Col span={6} m="0" p="0" align="center">
         <Box
@@ -112,7 +115,7 @@ export default function App() {
       </Grid.Col>
 
       <Grid.Col span={3}>
-        <Text fw="bold" hidden="true">Too cold! Your workplace isn't comfortable anymore, increase the temperature.</Text>
+        <Text fw="bold" hidden={true}>Too cold! Your workplace isn't comfortable anymore, increase the temperature.</Text>
       </Grid.Col>
       <Grid.Col span={6}>
       <Center>
@@ -147,11 +150,12 @@ export default function App() {
             <Button variant="filled" color="green" size="md" radius="md" onClick={decreaseGameStepSize}>(slower)</Button>
             <Button w="6em" id="gamePauseButton" variant="filled" color="green" size="lg" radius="lg" onClick={(e) => pauseGame(e)}>Pause</Button>
             <Button variant="filled" color="green" size="md" radius="md" onClick={increaseGameStepSize}>(faster)</Button>
-            <Text w="12em">Speed: {(1/gameStepSize)*1000}x</Text>
+            <Text w="12em">Speed: {(1/delay)*1000}x</Text>
           </Group>
           </Center>
         </Grid.Col>
       </Grid>
     </MantineProvider>
   )
+
 }
