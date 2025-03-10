@@ -15,8 +15,10 @@ export default function App() {
   const [lowerComf, setLowerComf] = useState(16);
   const [higherComf, setHigherComf] = useState(24);
 
+  const [sassyMessage, setSassyMessage] = useState("Everything is fine!")
+
   // https://www.h2xengineering.com/blogs/calculating-heat-loss-simple-understandable-guide/
-  const [heatLoss, setHeatLoss] = useState(0.1); // heat loss per hour per degree - 0.1 would be more realistic but "too slow".
+  const [heatLoss, setHeatLoss] = useState(1); // heat loss per hour per degree - 0.1 would be more realistic but "too slow".
 
   const [thermostat, setThermostat] = useState(270);
   const thermToHeat = {
@@ -143,13 +145,21 @@ export default function App() {
         <Grid.Col span={3}>
         </Grid.Col>
 
+
+        <Grid.Col span={12} >
+          <Center>
+          <Text fw="bold" mt="xl">{sassyMessage}</Text>
+          </Center>
+        </Grid.Col>
+
+
         <Grid.Col span="auto">
           <Center>
           <Group id="app-footer">
             <Text w="12em">Day: {Math.floor(gameTurn/24)}, time: {gameTurn % 24}:00</Text>
-            <Button variant="filled" color="green" size="md" radius="md" onClick={decreaseGameStepSize}>(slower)</Button>
-            <Button w="6em" id="gamePauseButton" variant="filled" color="green" size="lg" radius="lg" onClick={(e) => pauseGame(e)}>Pause</Button>
-            <Button variant="filled" color="green" size="md" radius="md" onClick={increaseGameStepSize}>(faster)</Button>
+            <Button variant="filled" color="orange" size="md" radius="md" onClick={decreaseGameStepSize}>(slower)</Button>
+            <Button w="6em" id="gamePauseButton" variant="filled" color="gray" size="lg" radius="lg" onClick={(e) => pauseGame(e)}>Pause</Button>
+            <Button variant="filled" color="orange" size="md" radius="md" onClick={increaseGameStepSize}>(faster)</Button>
             <Text w="12em">Speed: {(1/delay)*1000}x</Text>
           </Group>
           </Center>
