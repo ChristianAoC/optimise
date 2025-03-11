@@ -53,6 +53,14 @@ export default function App() {
         }
         newInTemp = Math.round(newInTemp * 10) / 10 // round to one decimal
         setIndoorTemp(newInTemp)
+
+        if (newInTemp >= higherComf) {
+          setSassyMessage("TOO F****** HOT BRUH")
+        }else if(newInTemp <= lowerComf){
+          setSassyMessage("TOO F****** COLD BRUH")
+        }else{
+          setSassyMessage("Everything is fine?")
+        }
       }
     }, delay)
     return () => clearTimeout(timer)
