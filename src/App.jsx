@@ -15,7 +15,7 @@ export default function App() {
   const [lowerComf, setLowerComf] = useState(16);
   const [higherComf, setHigherComf] = useState(24);
 
-  const [sassyMessage, setSassyMessage] = useState("Everything is fine!")
+  
 
   // https://www.h2xengineering.com/blogs/calculating-heat-loss-simple-understandable-guide/
   const [heatLoss, setHeatLoss] = useState(1); // heat loss per hour per degree - 0.1 would be more realistic but "too slow".
@@ -33,6 +33,12 @@ export default function App() {
   const [gamePaused, setGamePaused] = useState(false);
   const delay = Number(params.get("delay")) || 1000;
   const [gameTurn, setGameTurn] = useState(24);
+
+  // A constant that triggers failed game state 
+  const [gameFailed, setGameFailed] = useState(false);
+
+  // A message that gets updated in the middle of the screen depending on how you are doing
+  const [sassyMessage, setSassyMessage] = useState("Everything is fine!")
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -67,12 +73,15 @@ export default function App() {
    },
    [gamePaused, gameTurn, delay, indoorTemp, outdoorTemp]
   )
+
   
   function pauseGame(e) {
     if (!gamePaused) {
       e.target.innerHTML = "Play";
+      e.target.style.backgroundColor = "green";
     } else {
       e.target.innerHTML = "Pause";
+      e.target.style.backgroundColor = "gray";
     }
     setGamePaused(!gamePaused);
   }
@@ -93,8 +102,8 @@ export default function App() {
   return (
   <MantineProvider>
     <Grid align="center" mt="10">
-    <Grid.Col span={3} align="right">
-      <Text align="right">Current temperature:</Text>
+    <Grid.Col span={3} align="right" mt="xl">
+      {/*<Text align="right">Current temperature:</Text>*/}
     </Grid.Col>
     <Grid.Col span={6} m="0" p="0" align="center">
         <Box
@@ -114,8 +123,11 @@ export default function App() {
         <Box h="2.1em" mt="-2.25em" ml={(indoorTemp-21)*5+"%"}  w="3px" bg="yellow"></Box>
         </Box>
       </Grid.Col>
-      <Grid.Col span={3}>
+
+      <Grid.Col span={12}>
+        <Center>
         <Text align="left">Inside: {indoorTemp}ºC, outside: {outdoorTemp}ºC</Text>
+        </Center>
       </Grid.Col>
 
       <Grid.Col span={12}>
