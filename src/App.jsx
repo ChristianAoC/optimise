@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { AngleSlider, Box, Button, Center, Grid, Group, MantineProvider, Text, Title } from '@mantine/core';
+import { AngleSlider, Box, Button, Center, Grid, Group, MantineProvider, Text, Title,Space } from '@mantine/core';
 import { useSearchParams } from "react-router";
 import './App.css'
 import '@mantine/core/styles.css';
@@ -116,6 +116,12 @@ export default function App() {
       </Center>
     </Grid.Col>
     
+    <Grid.Col span={12} align="right" >
+      <Center>
+        <Text>Hello desk monkey. You have one job. Keep the system in the safe zone. Good luck.</Text>
+      </Center>
+    </Grid.Col>
+
     <Grid.Col span={3} align="right" mt="xl">
       {/*<Text align="right">Current temperature:</Text>*/}
     </Grid.Col>
@@ -145,14 +151,18 @@ export default function App() {
       </Grid.Col>
 
       <Grid.Col span={12}>
+        <Center>
+        <Title order={2}>Keep it optimal!</Title>    
+        </Center>
+      </Grid.Col>
+
+      <Grid.Col span={3} align="right">
       <Center>
-        <Title order={2}>Keep it optimal!</Title>
+        <Title order={3}>System Input</Title>
       </Center>
       </Grid.Col>
 
-      <Grid.Col span={3}>
-        <Text fw="bold" hidden={true}>Too cold! Your workplace isn't comfortable anymore, increase the temperature.</Text>
-      </Grid.Col>
+     
       <Grid.Col span={6}>
       <Center>
         <AngleSlider
@@ -186,6 +196,14 @@ export default function App() {
           <Center>
           <Title order={2}>{sassyMessage}</Title>
           
+          </Center>
+        </Grid.Col>
+
+        <Grid.Col span={12} >
+          <Center>
+          <Button w="6em" id="gamePauseButton" variant="filled" color="gray" size="lg" radius="lg">-</Button>
+          <Space w="md" />
+          <Button w="6em" id="gamePauseButton" variant="filled" color="gray" size="lg" radius="lg">+</Button>
           </Center>
         </Grid.Col>
 
