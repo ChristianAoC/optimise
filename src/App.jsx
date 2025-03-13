@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { AngleSlider, Box, Button, Center, Grid, Group, MantineProvider, Text } from '@mantine/core';
+import { AngleSlider, Box, Button, Center, Grid, Group, MantineProvider, Text, Title,Space } from '@mantine/core';
 import { useSearchParams } from "react-router";
 import './App.css'
 import '@mantine/core/styles.css';
@@ -15,19 +15,26 @@ export default function App() {
   const [lowerComf, setLowerComf] = useState(16);
   const [higherComf, setHigherComf] = useState(24);
 
+  const [lowerLimit, setLowerLimit] = useState(0);
+  const [upperLimit, setUpperLimit] = useState(40);
+
   
 
   // https://www.h2xengineering.com/blogs/calculating-heat-loss-simple-understandable-guide/
   const [heatLoss, setHeatLoss] = useState(1); // heat loss per hour per degree - 0.1 would be more realistic but "too slow".
 
   const [thermostat, setThermostat] = useState(270);
+
+  //ob: playing with these values, an interesting idea would be to mess with the way the thermostat works, breaking people's affordances/mental models
   const thermToHeat = {
     270: 0,
     315: 15,
     345: 18,
      15: 21,
      45: 24,
-     75: 27
+     75: 27,
+     105: 32,
+     135: 70 
   }
 
   const [gamePaused, setGamePaused] = useState(false);
@@ -61,9 +68,9 @@ export default function App() {
         setIndoorTemp(newInTemp)
 
         if (newInTemp >= higherComf) {
-          setSassyMessage("TOO F****** HOT BRUH")
+          setSassyMessage("TOO F****** HIGH BRUH")
         }else if(newInTemp <= lowerComf){
-          setSassyMessage("TOO F****** COLD BRUH")
+          setSassyMessage("TOO F****** LOW BRUH")
         }else{
           setSassyMessage("Everything is fine?")
         }
@@ -102,6 +109,19 @@ export default function App() {
   return (
   <MantineProvider>
     <Grid align="center" mt="10">
+    
+    <Grid.Col span={12} align="right" mt="xl">
+      <Center>
+        <Title order={1}>Optimise!</Title>
+      </Center>
+    </Grid.Col>
+    
+    <Grid.Col span={12} align="right" >
+      <Center>
+        <Text>Hello desk monkey. You have one job. Keep the system in the safe zone. Good luck.</Text>
+      </Center>
+    </Grid.Col>
+
     <Grid.Col span={3} align="right" mt="xl">
       {/*<Text align="right">Current temperature:</Text>*/}
     </Grid.Col>
@@ -114,11 +134,11 @@ export default function App() {
           h="2em"
         >
         <Group justify="space-between">
-          <Text align="left" ml="10px">too cold</Text>
-          <Text align="right" mr="10px">too warm</Text>
+          <Text align="left" ml="10px">too low</Text>
+          <Text align="right" mr="10px">too high</Text>
         </Group>
         <Box h="2.4em" mt="-1.75em" ml={(lowerComf-1)*2.5+"%"} mr={(41-higherComf)*2.5+"%"} bd="3px dotted black">
-            <Text align="center">comfy</Text>
+            <Text align="center">safe</Text>
         </Box>
         <Box h="2.1em" mt="-2.25em" ml={(indoorTemp-21)*5+"%"}  w="3px" bg="yellow"></Box>
         </Box>
@@ -126,26 +146,23 @@ export default function App() {
 
       <Grid.Col span={12}>
         <Center>
-        <Text align="left">Inside: {indoorTemp}ºC, outside: {outdoorTemp}ºC</Text>
+        {/*<Text align="left">Inside: {indoorTemp}ºC, outside: {outdoorTemp}ºC</Text>*/}
         </Center>
       </Grid.Col>
 
       <Grid.Col span={12}>
         <Center>
-          <Text fw="bold">What is the comfort range? Who knows, just...</Text>
+        <Title order={2}>Keep it optimal!</Title>    
         </Center>
       </Grid.Col>
 
-      <Grid.Col span={12} mt="xl">
-        <Center>
-          <Text fw="bold">Keep it comfy!</Text>
-        </Center>
+      <Grid.Col span={3} align="right">
+      <Center>
+        <Title order={3}>System Input</Title>
+      </Center>
       </Grid.Col>
 
-      <Grid.Col span={3}>
-        <Text fw="bold" hidden={true}>Too cold! Your workplace isn't comfortable anymore, increase the temperature.</Text>
-      </Grid.Col>
-
+     
       <Grid.Col span={6}>
       <Center>
         <AngleSlider
@@ -164,7 +181,9 @@ export default function App() {
             { value: 345, label: 2 },
             { value:  15, label: 3 },
             { value:  45, label: 4 },
-            { value:  75, label: 5 }
+            { value:  75, label: 5 },
+            { value:  105, label: 6 },
+            { value:  135, label: 7 }
           ]}
         />
         </Center>
@@ -175,7 +194,16 @@ export default function App() {
 
         <Grid.Col span={12} >
           <Center>
-          <Text fw="bold" mt="xl">{sassyMessage}</Text>
+          <Title order={2}>{sassyMessage}</Title>
+          
+          </Center>
+        </Grid.Col>
+
+        <Grid.Col span={12} >
+          <Center>
+          <Button w="6em" id="gamePauseButton" variant="filled" color="gray" size="lg" radius="lg">-</Button>
+          <Space w="md" />
+          <Button w="6em" id="gamePauseButton" variant="filled" color="gray" size="lg" radius="lg">+</Button>
           </Center>
         </Grid.Col>
 
