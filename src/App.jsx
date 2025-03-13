@@ -131,14 +131,21 @@ export default function App() {
       </Grid.Col>
 
       <Grid.Col span={12}>
-      <Center>
-        <Text fw="bold">Keep it comfy!</Text>
-      </Center>
+        <Center>
+          <Text fw="bold">What is the comfort range? Who knows, just...</Text>
+        </Center>
+      </Grid.Col>
+
+      <Grid.Col span={12} mt="xl">
+        <Center>
+          <Text fw="bold">Keep it comfy!</Text>
+        </Center>
       </Grid.Col>
 
       <Grid.Col span={3}>
         <Text fw="bold" hidden={true}>Too cold! Your workplace isn't comfortable anymore, increase the temperature.</Text>
       </Grid.Col>
+
       <Grid.Col span={6}>
       <Center>
         <AngleSlider
@@ -171,6 +178,20 @@ export default function App() {
           <Text fw="bold" mt="xl">{sassyMessage}</Text>
           </Center>
         </Grid.Col>
+
+        <Grid.Col span={3}>
+        </Grid.Col>
+
+        <Grid.Col span={6} mt="xl" >
+          <Center>
+          <Text fw="bold" mt="xl">PLACEHOLDER TEXT FOR RANDOM NEWS TICKER THAT DISPLAYS FINDINGS FROM THE PROJECT. IF ITS TIED TO THE SPEED THOUGH IT MIGHT BE VERY CHAOTIC</Text>
+          </Center>
+        </Grid.Col>
+        <Grid.Col span={3}>
+        </Grid.Col>
+
+
+
 
 
         <Grid.Col span="auto">
