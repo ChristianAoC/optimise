@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+
 import { AngleSlider, Box, Button, Center, Grid, Group, MantineProvider, Text, Title,Space } from '@mantine/core';
 import { useSearchParams } from "react-router";
-import './App.css'
+import './App.css';
 import '@mantine/core/styles.css';
 
 export default function App() {
@@ -25,6 +26,16 @@ export default function App() {
 
   const [thermostat, setThermostat] = useState(270);
 
+  const [gamePaused, setGamePaused] = useState(true);
+  const delay = Number(params.get("delay")) || 1000;
+  const [gameTurn, setGameTurn] = useState(24);
+
+  // A constant that triggers failed game state 
+  const [gameFailed, setGameFailed] = useState(false);
+
+  // A message that gets updated in the middle of the screen depending on how you are doing
+  const [sassyMessage, setSassyMessage] = useState("Everything is fine!")
+
   //ob: playing with these values, an interesting idea would be to mess with the way the thermostat works, breaking people's affordances/mental models
   const thermToHeat = {
     270: 0,
@@ -37,15 +48,7 @@ export default function App() {
      135: 70 
   }
 
-  const [gamePaused, setGamePaused] = useState(true);
-  const delay = Number(params.get("delay")) || 1000;
-  const [gameTurn, setGameTurn] = useState(24);
-
-  // A constant that triggers failed game state 
-  const [gameFailed, setGameFailed] = useState(false);
-
-  // A message that gets updated in the middle of the screen depending on how you are doing
-  const [sassyMessage, setSassyMessage] = useState("Everything is fine!")
+  
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -74,6 +77,8 @@ export default function App() {
         }else{
           setSassyMessage("Everything is fine?")
         }
+
+        failStateCheck(newInTemp);
       }
     }, delay)
     return () => clearTimeout(timer)
@@ -112,14 +117,44 @@ export default function App() {
   *   pop up message about how long you survived and how much of the system knowledge you uncoverred ,
   *   and offer a restart game button - need a reset function :) 
   * */
-  function failStateCheck(temp){
+  function failStateCheck(t){
 
-    if (temp<=lowerLimit){
+    if (t<=lowerLimit){
+      //Popup.alert('I am alert, nice to meet you');
+    }
+    else if (t>=upperLimit){
+      //Popup.alert('I am alert, nice to meet you');
 
     }
-    else if (temp>=upperLimit){
+  }
 
-    }
+  //function for resetting all the core variables to their default states
+  function reset(){
+
+    setIndoorTemp(useState(21));
+    setOutdoorTemp(useState(10));
+    setOutdoorTempMax(useState(22));
+    setOutdoorTempMin(useState(-8));
+    setLowerComf(useState(16));
+    setHigherComf(useState(24));
+    setLowerLimit(useState(0));
+    setUpperLimit(useState(40));
+    setGameTurn(useState(24));
+    setGamePaused(useState(true));
+   // delay = Number(params.get("delay")) || 1000;
+
+    setThermostat(useState(270));
+
+    // thermToHeat = {
+    //   270: 0,
+    //   315: 15,
+    //   345: 18,
+    //    15: 21,
+    //    45: 24,
+    //    75: 27,
+    //    105: 32,
+    //    135: 70 
+    // }
   }
 
   return (
@@ -243,7 +278,7 @@ export default function App() {
           <Group id="app-footer">
             <Text w="12em">Day: {Math.floor(gameTurn/24)}, time: {gameTurn % 24}:00</Text>
             <Button variant="filled" color="orange" size="md" radius="md" onClick={decreaseGameStepSize}>(slower)</Button>
-            <Button w="6em" id="gamePauseButton" variant="filled" color="green" size="lg" radius="lg" onClick={(e) => pauseGame(e)}>Play</Button>
+            <Button variant="filled" color="green" w="6em" id="gamePauseButton"  size="lg" radius="lg" onClick={(e) => pauseGame(e)}>Play</Button>
             <Button variant="filled" color="orange" size="md" radius="md" onClick={increaseGameStepSize}>(faster)</Button>
             <Text w="12em">Speed: {(1/delay)*1000}x</Text>
           </Group>
