@@ -37,7 +37,7 @@ export default function App() {
      135: 70 
   }
 
-  const [gamePaused, setGamePaused] = useState(false);
+  const [gamePaused, setGamePaused] = useState(true);
   const delay = Number(params.get("delay")) || 1000;
   const [gameTurn, setGameTurn] = useState(24);
 
@@ -105,6 +105,22 @@ export default function App() {
     temp = (temp-21)*5
   }
 
+  /*
+  * function that checks whether the game is in a fail state
+  * if fail, 
+  *   pause game, 
+  *   pop up message about how long you survived and how much of the system knowledge you uncoverred ,
+  *   and offer a restart game button - need a reset function :) 
+  * */
+  function failStateCheck(temp){
+
+    if (temp<=lowerLimit){
+
+    }
+    else if (temp>=upperLimit){
+
+    }
+  }
 
   return (
   <MantineProvider>
@@ -203,7 +219,7 @@ export default function App() {
           <Center>
           <Button w="6em" id="printButton" variant="filled" color="gray" size="lg" radius="lg" onClick={(e) => print()}>Print</Button>
           <Space w="md" />
-          <Button w="6em" id="increaseVar" variant="filled" color="gray" size="lg" radius="lg">File</Button>
+          <Button w="12em" id="unlockTempSensorButton" variant="filled" color="gray" size="lg" radius="lg">New Unlock</Button>
           </Center>
         </Grid.Col>
 
@@ -227,7 +243,7 @@ export default function App() {
           <Group id="app-footer">
             <Text w="12em">Day: {Math.floor(gameTurn/24)}, time: {gameTurn % 24}:00</Text>
             <Button variant="filled" color="orange" size="md" radius="md" onClick={decreaseGameStepSize}>(slower)</Button>
-            <Button w="6em" id="gamePauseButton" variant="filled" color="gray" size="lg" radius="lg" onClick={(e) => pauseGame(e)}>Pause</Button>
+            <Button w="6em" id="gamePauseButton" variant="filled" color="green" size="lg" radius="lg" onClick={(e) => pauseGame(e)}>Play</Button>
             <Button variant="filled" color="orange" size="md" radius="md" onClick={increaseGameStepSize}>(faster)</Button>
             <Text w="12em">Speed: {(1/delay)*1000}x</Text>
           </Group>
