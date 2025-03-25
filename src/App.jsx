@@ -85,10 +85,10 @@ export default function App() {
   function pauseGame(e) {
     if (!gamePaused) {
       e.target.innerHTML = "Play";
-      e.target.style.backgroundColor = "green";
+      e.target.style.background = "green";
     } else {
       e.target.innerHTML = "Pause";
-      e.target.style.backgroundColor = "gray";
+      e.target.style.background= "gray";
     }
     setGamePaused(!gamePaused);
   }
@@ -201,9 +201,9 @@ export default function App() {
 
         <Grid.Col span={12} >
           <Center>
-          <Button w="6em" id="gamePauseButton" variant="filled" color="gray" size="lg" radius="lg">-</Button>
+          <Button w="6em" id="printButton" variant="filled" color="gray" size="lg" radius="lg" onClick={(e) => print()}>Print</Button>
           <Space w="md" />
-          <Button w="6em" id="gamePauseButton" variant="filled" color="gray" size="lg" radius="lg">+</Button>
+          <Button w="6em" id="increaseVar" variant="filled" color="gray" size="lg" radius="lg">File</Button>
           </Center>
         </Grid.Col>
 
