@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { AngleSlider, Box, Button, Center, Grid, Group, MantineProvider, Text } from '@mantine/core';
 import { useSearchParams } from "react-router";
-import './App.css'
+import './main.css'
 import '@mantine/core/styles.css';
 
 export default function App() {
