@@ -203,15 +203,18 @@ export default function App() {
             onClick={() => {
               if (nameInput.trim() === "") return;
               const sanitized = escapeHtml(nameInput.trim());
-              const leaderboard = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-              leaderboard.push({
+              const scores = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+
+              scores.push({
                 name: sanitized,
                 score: pendingScore,
                 time: new Date().toISOString(),
               });
-              leaderboard.sort((a, b) => b.score - a.score);
-              leaderboard = leaderboard.slice(0, 10);
-              localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+
+              scores.sort((a, b) => b.score - a.score);
+              const top10 = scores.slice(0, 10);
+
+              localStorage.setItem("leaderboard", JSON.stringify(top10));
               setHasSaved(true);
               setIsSaving(false);
             }}
