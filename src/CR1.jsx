@@ -4,6 +4,8 @@ import { useElementSize, useMediaQuery } from '@mantine/hooks';
 import { useSearchParams } from "react-router";
 import './main.css'
 import '@mantine/core/styles.css';
+import failed1 from './assets/failed1.jpg';
+import failed2 from './assets/failed2.jpg';
 
 export default function App() {
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
@@ -42,8 +44,8 @@ export default function App() {
   const [gameFailed, setGameFailed] = useState(false);
 
   const failureImages = {
-    1: 'src/assets/failed1.jpg',
-    2: 'src/assets/failed2.jpg',
+  1: failed1,
+  2: failed2,
   };
 
   const { ref, width } = useElementSize();
@@ -59,6 +61,8 @@ export default function App() {
   const [nameInput, setNameInput] = useState("");
 
   const [pendingScore, setPendingScore] = useState(0);
+
+  const score = gameTurn;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -111,6 +115,7 @@ export default function App() {
   )
 
   function gameOver(cond) {
+    setPendingScore(score);
     setGamePaused(true)
     setGameFailed(cond)
     setPendingScore(score);
@@ -177,7 +182,14 @@ export default function App() {
       }
       withCloseButton={false}
       >
-      <Image src={failureImages[gameFailed]} alt="Game failed" />
+      <Image
+        src={failureImages[gameFailed]}
+        alt="Game failed"
+        fit="contain"
+        w="100%"
+        maw={300}
+        mx="auto"
+      />
       <Text ta="center">
         You lasted {Math.floor(gameTurn/24)} days and {gameTurn % 24} hours.
       </Text>
