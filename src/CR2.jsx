@@ -164,9 +164,10 @@ export default function App() {
       </Center>
     </Grid.Col>
     
-    <Grid.Col span={12} align="right" >
+    <Grid.Col span={12} align="center">
       <Center>
-        <Text>See how changing the heat loss per hour changes the demand for heating to keep it comfy. Adjust the heat loss value on the left.</Text>
+        <Text>See how changing the heat loss per hour changes the demand for heating to keep it comfy. Adjust the heat loss value on the left.
+        <br />(This app doesn't support mobile.)</Text>
       </Center>
     </Grid.Col>
 
